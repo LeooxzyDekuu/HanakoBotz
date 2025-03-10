@@ -141,7 +141,7 @@ break
 ## **All Contributors**  
 [![AxellNetwork](https://github.com/AxellNetwork.png?size=100)](https://github.com/AxellNetwork) | [![AndhikaGG](https://github.com/AndhikaGG.png?size=100)](https://github.com/AndhikaGG)  
 ---|---  
-[AxellNetwork](https://github.com/AxellNetwork) | [AndhikaGG](https://github.com/ERLANRAHMAT)  
+[AxellNetwork](https://github.com/AxellNetwork) | [AndhikaGG](https://github.com/AndhikaGG)  
 Base Script | Penyumbang fitur
 
 ---
