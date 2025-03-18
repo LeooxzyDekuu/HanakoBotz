@@ -27,6 +27,7 @@
     "@ibaraki-douji/pixivts": "^2.4.1",
     "@neoxr/quote-api": "^1.1.1-dev",
     "@rifandavinci/yt-scraper": "^1.1.5",
+    "@hapi/boom": "^9.1.3",
     "@vreden/youtube_scraper": "^1.2.4",
     "akiraa-wb": "^2.0.2",
     "async-lock": "^1.4.1",
