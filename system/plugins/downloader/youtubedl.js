@@ -79,15 +79,20 @@ ${metadata}
         if (isAudio) {
             let audio;
             try {
-                const {
-                    result: savetube
-                } = await Scraper.SaveTube(finalUrl, "mp3")
-                audio = savetube.download;
+                const amdla = await Scraper.amdl(finalUrl, 'audio', '320k')
+                audio = amdla.download
             } catch (e) {
                 try {
-                    const ddownra = await Scraper.ddownr.download(finalUrl, 'mp3');
-                    audio = ddownra.downloadUrl;
-                } catch (e) {}
+                    const {
+                        result: savetube
+                    } = await Scraper.SaveTube(finalUrl, "mp3")
+                    audio = savetube.download;
+                } catch (e) {
+                    try {
+                        const ddownra = await Scraper.ddownr.download(finalUrl, 'mp3');
+                        audio = ddownra.downloadUrl;
+                    } catch (e) {}
+                }
             }
 
             const getid = await dist.getVideoID(finalUrl);
@@ -98,7 +103,7 @@ ${metadata}
             });
 
             const sizea = await Func.getSize(audio)
-            if (sizea > 30 * 1024 * 1024) {
+            if (sizea > 100 * 1024 * 1024) {
                 return sock.sendMessage(m.cht, {
                     document: {
                         url: audio
@@ -129,22 +134,27 @@ ${metadata}
 
             let video;
             try {
-                const {
-                    result: savetube
-                } = await Scraper.SaveTube(finalUrl, "720")
-                video = savetube.download;
+                const amdlv = await Scraper.amdl(finalUrl, 'video', '720p')
+                video = amdlv.download
             } catch (e) {
                 try {
-                    const ddownrv = await Scraper.ddownr.download(finalUrl, '720');
-                    video = ddownrv.downloadUrl;
-                } catch (e) {}
+                    const {
+                        result: savetube
+                    } = await Scraper.SaveTube(finalUrl, "720")
+                    video = savetube.download;
+                } catch (e) {
+                    try {
+                        const ddownrv = await Scraper.ddownr.download(finalUrl, '720');
+                        video = ddownrv.downloadUrl;
+                    } catch (e) {}
+                }
             }
 
             let response = await fetch(video, {
                 method: "HEAD"
             });
             let fileSizeInBytes = parseInt(response.headers.get("content-length"));
-            if (fileSizeInBytes > 30 * 1024 * 1024) {
+            if (fileSizeInBytes > 100 * 1024 * 1024) {
                 return sock.sendMessage(m.cht, {
                     document: {
                         url: video
