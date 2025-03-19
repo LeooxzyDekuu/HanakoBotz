@@ -36,7 +36,7 @@ module.exports = {
             let zid = search[Math.floor(Math.random() * search.length)]
             let detail = await Scraper.zerochan.detail(zid.id)
             if (!detail) throw '⚠️ Maaf Error Yg Di Download'
-            let capt = `📁 Download ZeroChan\n`
+            let capt = `🔍 Search ZeroChan\n`
             capt += `> • *Title:* ${detail.title}\n`
             capt += `> • *Link:* ${zid.id}`
 
