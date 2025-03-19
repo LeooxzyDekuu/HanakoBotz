@@ -1,6 +1,3 @@
-const axios = require('axios')
-const cheerio = require('cheerio')
-
 module.exports = {
     command: "zerochan",
     alias: ["zero", "zeroch", "zrch"],
@@ -13,91 +10,48 @@ module.exports = {
     async run(m, {
         sock,
         Func,
+        Scraper,
         text,
         config
     }) {
-        if (!text) throw 'Nama Anime?'
-        let zerochanft = await zerochan(text)
-        let pickget = zerochanft[Math.floor(Math.random() * zerochanft.length)]
-        let detail = await zerochanDetail(pickget.id)
+        if (!text) throw '⚠️ Masukan Query/Link Tapi Karakter Anime'
+        if (Func.isUrl(text)) {
+            if (!/www.zerochan.net/.test(text)) throw '⚠️Mana Link ZeroChan Nya !'
+            let detail = await Scraper.zerochan.detail(text)
+            if (!detail) throw '⚠️ Maaf Error Yg Di Download'
+            let capt = `📁 Download ZeroChan\n`
+            capt += `> • *Title:* ${detail.title}\n`
+            capt += `> • *Link:* ${text}`
+            sock.sendMessage(m.cht, {
+                image: {
+                    url: detail.downloadLink
+                },
+                caption: capt
+            }, {
+                quoted: m
+            })
+        } else {
+            let search = await Scraper.zerochan.search(text)
+            if (!search && !search.length > 0) throw '⚠️ Maaf Pencarian Anda Tidak Di Temukan'
+            let zid = search[Math.floor(Math.random() * search.length)]
+            let detail = await Scraper.zerochan.detail(zid.id)
+            if (!detail) throw '⚠️ Maaf Error Yg Di Download'
+            let capt = `📁 Download ZeroChan\n`
+            capt += `> • *Title:* ${detail.title}\n`
+            capt += `> • *Link:* ${zid.id}`
 
-        await sock.sendMessage(m.cht, {
-            image: {
-                url: detail.downloadLink
-            },
-            caption: `Judul : ${detail.title}`,
-            footer: config.ownername,
-            buttons: [{
-                buttonId: ".zerochan " + text,
-                buttonText: {
-                    displayText: 'Next'
-                }
-            }],
-            viewOnce: true,
-            headerType: 6,
-            contextInfo: {
-                mentionedJid: [m.sender],
-                forwardingScore: 999,
-                isForwarded: true,
-                forwardedNewsletterMessageInfo: {
-                    newsletterJid: config.saluran,
-                    newsletterName: `Zerochan By: ${config.ownername}`,
-                    serverMessageId: 143
-                }
-            }
-        }, {
-            quoted: m
-        });
-    }
-}
-
-async function zerochan(search) {
-    const url = `https://www.zerochan.net/search?q=${encodeURIComponent(search)}`;
-    try {
-        const {
-            data
-        } = await axios.get(url);
-        const $ = cheerio.load(data);
-        const imageDetails = [];
-
-        $('.thumb img').each((index, element) => {
-            const imgUrl = $(element).attr('data-src') || $(element).attr('src');
-            const link = $(element).closest('a').attr('href');
-            const title = $(element).attr('alt');
-
-            if (imgUrl && link && title) {
-                imageDetails.push({
-                    id: `https://www.zerochan.net${link}`,
-                    title: title,
-                    imgUrl: imgUrl
-                });
-            }
-        });
-
-        return imageDetails;
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
-async function zerochanDetail(url) {
-    try {
-        const {
-            data
-        } = await axios.get(`${url}`);
-        const $ = cheerio.load(data);
-
-        const scriptContent = $('script[type="application/ld+json"]').html();
-        const jsonData = JSON.parse(scriptContent);
-
-        const title = jsonData.name;
-        const downloadLink = jsonData.contentUrl;
-
-        return {
-            title,
-            downloadLink
-        };
-    } catch (error) {
-        console.error('Error:', error);
+            await sock.sendAliasMessage(m.cht, {
+                image: {
+                    url: detail.downloadLink
+                },
+                caption: capt,
+            }, [{
+                alias: 'next',
+                response: '.zerochan ' + text
+            }, {
+                alias: 'lanjut',
+                response: '.zerochan ' + text
+            }], m)
+        }
     }
 }
