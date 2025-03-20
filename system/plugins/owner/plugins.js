@@ -1,3 +1,10 @@
+// © HanakoBotz
+// • By: Leooxzy - Deku
+// • Owner: 6283136099660
+
+// By: Leooxzy
+// Bio cr: Krz
+
 const fs = require("node:fs");
 
 module.exports = {
@@ -44,7 +51,12 @@ module.exports = {
       let input = m.text.replace("--add", "").trim();
       try {
         let file = pg.directory + "/" + input + ".js";
-        fs.writeFileSync(file.trim(), m.quoted.body);
+        fs.writeFileSync(file.trim(), `// © HanakoBotz
+// • By: Leooxzy - Deku
+// • Owner: 6283136099660
+
+// By: Leooxzy
+// Bio cr: Krz\n\n${m.quoted.body}`);
         m.reply("> Berhasil Menyimpan Plugins : " + input);
       } catch (e) {
         m.reply(`> Gagal menyimpan Plugins, coba lagi`);
