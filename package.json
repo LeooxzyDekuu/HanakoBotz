@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/LeooxzyDekuu/HanakoBotz#readme",
   "dependencies": {
+    "@vioo/apis": "latest",
     "@distube/ytdl-core": "^4.16.4",
     "@ibaraki-douji/pixivts": "^2.4.1",
     "@neoxr/quote-api": "^1.1.1-dev",
