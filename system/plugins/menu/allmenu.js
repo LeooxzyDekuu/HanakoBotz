@@ -92,7 +92,8 @@ let deku = async (m, {
 ⏤͟͟͞͞╳────────── .✦
 │
 ⏤͟͟͞͞╳── *[ Menu Case ]* ── .々─ᯤ
-${matches.map((a, i) => `│    =〆 ${m.prefix + a}`).join("\n")}`);
+${matches.map((a, i) => `│    =〆 ${m.prefix + a}`).join("\n")}
+\n⏤͟͟͞͞╳────────── .✦`);
 
     Object.entries(menu).forEach(([tag, commands]) => {
         caption += `\n\n${Func.Styles(`⏤͟͟͞͞╳── *[ Menu - ${tag.toUpperCase()} ]* ── .々─ᯤ`)}`;
