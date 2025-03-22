@@ -106,7 +106,7 @@ ${list.command
 `);
 
 
-       await sock.sendMessage(m.cht, {
+        await sock.sendMessage(m.cht, {
             video: {
                 url: "https://files.catbox.moe/f1l5ij.mp4"
             },
@@ -130,8 +130,64 @@ ${list.command
                     sourceUrl: "https://www.tiktok.com/@leooxzy_ganz/",
                 }
             }
-        }, { quoted: await m.froll() })
-    } else {
+        }, {
+            quoted: await m.froll()
+        })
+    } else if (text === "case") {
+        let data = fs.readFileSync(process.cwd() + "/system/case.js", "utf8");
+        let casePattern = /case\s+"([^"]+)"/g;
+        let matches = data.match(casePattern);
+        if (!matches) throw "Tidak ada case yang ditemukan."
+        matches = matches.map(match => match.replace(/case\s+"([^"]+)"/, "$1"));
+
+        let caption = Func.Styles(`${hanakoai}${readmore}
+
+⏤͟͟͞͞╳─ \`[ ɪɴғᴏ - ᴜsᴇʀ ]\` ── .々─ᯤ
+> ɴᴀᴍᴇ: ${m.pushName}
+> ɴᴏᴍᴏʀ: @${m.sender.split('@')[0]}
+> ʟɪᴍɪᴛ: ${db.list().user[m.sender].limit}
+
+⏤͟͟͞͞╳─ \`[ informasi - bot ]\` ── .々─ᯤ
+> ᴜsᴇʀ: ${totalreg}
+> ᴍᴏᴅᴇ: ${db.list().settings.self ? 'sᴇʟғ' : `ᴘᴜʙʟɪᴄ`}
+> version: ${pkg.version}
+> ᴘʀᴇғɪx: ${m.prefix}
+> ᴅᴀᴛᴇ: ${date}
+${readmore}
+⏤͟͟͞͞╳── *[ Menu Case ]* ── .々─ᯤ
+${matches.map((a, i) => `│    =〆 ${m.prefix + a}`).join("\n")}
+⏤͟͟͞͞╳────────── .✦
+
+Kalau Error Bisa Hubungi Ke .owner gass`);
+
+        await sock.sendMessage(m.cht, {
+            video: {
+                url: "https://files.catbox.moe/f1l5ij.mp4"
+            },
+            caption: caption,
+            gifPlayback: true,
+            contextInfo: {
+                mentions: [m.sender],
+                isForwarded: !0,
+                forwardingScore: 127,
+                forwardedNewsletterMessageInfo: {
+                    newsletterJid: config.saluran,
+                    newsletterName: `${config.name} | ` + date,
+                    serverMessageId: -1
+                },
+                externalAdReply: {
+                    title: `々 ${config.ownername2} | ${config.name}`,
+                    body: `${config.ownername2} | ` + date,
+                    mediaType: 1,
+                    thumbnail: fs.readFileSync('./image/DekuThumb.jpg'),
+                    renderLargerThumbnail: false,
+                    sourceUrl: "https://www.tiktok.com/@leooxzy_ganz/",
+                }
+            }
+        }, {
+            quoted: await m.froll()
+        })
+    } else if (text === "list") {
         let list = Object.keys(menu);
         const xmenu_oh = `${hanakoai}${readmore}
 
@@ -149,6 +205,8 @@ ${list.command
 ${readmore}
 ⏤͟͟͞͞╳── \`[ ᴘᴇɴᴛᴜɴᴊᴜᴋ ]\` ── .々─ᯤ
 │    =〆 ${m.prefix}allmenu
+│    =〆 ${m.prefix}menu list
+│    =〆 ${m.prefix}menu case
 ${list.map((a) => `│    =〆 ${m.prefix + m.command} ${a}`).join("\n")}
 ⏤͟͟͞͞╳────────── .✦
 
@@ -182,11 +240,6 @@ Kalau Error Bisa Hubungi Ke .owner gass`
             {
                 title: '< ! > Ai',
                 rows: [{
-                        title: 'Ai Yuta',
-                        description: `Ai Yuta Dari Anime: Jujutsu kaisen`,
-                        id: `${m.prefix}Yuta halo`
-                    },
-                    {
                         title: 'Ai Bakugo',
                         description: `Ai Bakugo Dari: Anime My Hero Academia`,
                         id: `${m.prefix}bakugo halo`
@@ -209,6 +262,21 @@ Kalau Error Bisa Hubungi Ke .owner gass`
                 ]
             },
             {
+                title: '< ! > Menu Handalan',
+                rows: [{
+                    title: `${m.command} all`,
+                    description: `Menampilkan pesan menu all`,
+                    id: `${m.prefix + 'allmenu'}`
+                }, {
+                    title: `${m.command} list`,
+                    description: `Menampilkan pesan menu list`,
+                    id: `${m.prefix + m.command} list`
+                }, {
+                    title: `${m.command} case`,
+                    description: `Menampilkan pesan menu case`,
+                    id: `${m.prefix + m.command} case`
+                }],
+            }, {
                 title: '< ! > Pentunjuk',
                 rows: list.map((a) => ({
                     title: `${m.command} ${a}`,
@@ -222,7 +290,7 @@ Kalau Error Bisa Hubungi Ke .owner gass`
             title: 'Click Here⎙',
             sections
         };
-       await sock.sendMessage(m.cht, {
+        await sock.sendMessage(m.cht, {
             location: {
                 degreesLatitude: 0,
                 degreesLongitude: 0,
@@ -254,11 +322,56 @@ Kalau Error Bisa Hubungi Ke .owner gass`
                     merchant_url: config.wagc
                 })
             }]
-        }, { quoted: await m.froll() })
+        }, {
+            quoted: await m.froll()
+        })
 
+    } else {
+        let caption = `Hai ${m.pushName}👋
+
+Aku adalah Hanako-Kun, dari anime Jibaku Shounen Hanako-kun, saya akan membantu kamu dengan berbagai fitur yang kamu butuhkan. Berikut adalah beberapa opsi yang tersedia:
+
+**Berikut Beberapa Opsi Yang Bisa Saya Tawarkan**
+
+*   **Menu**: Menampilkan Menu Utama
+*   **List**: Menampilkan Menu List
+*   **All**: Menampilkan Semua Fitur Bot WhatsApp
+*   **Anime**: Informasi tentang anime, karakter, dan episode
+*   **Downloader**: Download anime, manga, dan musik
+*   **Tools**: Berbagai tools seperti konversi bahasa, kalkulator, dan lain-lain
+*   **Main**: Permainan teks seperti RPG, Hidup atau Mati, dan lain-lain
+*   **Search**: Cari informasi tentang berbagai topik
+*   **Case**: Terdapat Fitur Di Folder Case.js Dan Fitur Fitur Case Anti, Tools, Dll
+*   **Menfess**: Berbagi pengalaman dan cerita tentang kehidupan sehari-hari
+*   **Game**: Permainan teks yang lebih menantang
+*   **RPG**: Permainan teks RPG yang lebih seru
+*   **Help**: Menampilkan Semua Menunjukkan/Tutorial Cara Mengunakan Bot
+
+Pilih salah satu menu yang kamu inginkan, aku akan membantu kamu!`
+
+        await sock.sendMessage(m.cht, {
+            image: fs.readFileSync('./image/Hanako-kun.jpg'),
+            caption: Func.Styles(caption), // Use this if you are using an image or video
+            footer: `© ${config.name}`,
+            buttons: [{
+                    buttonId: '.menu list',
+                    buttonText: {
+                        displayText: 'List'
+                    }
+                },
+                {
+                    buttonId: '.help',
+                    buttonText: {
+                        displayText: 'Help'
+                    }
+                }
+            ]
+        }, {
+            quoted: await m.froll()
+        })
         await m.reply({
             audio: {
-                url: "https://files.catbox.moe/ujx8u9.m4a"
+                url: "https://files.catbox.moe/1n8ki1.mp3"
             },
             mimetype: 'audio/mpeg',
             ptt: true
@@ -266,11 +379,11 @@ Kalau Error Bisa Hubungi Ke .owner gass`
     }
 }
 
-deku.command = "menu"
-deku.alias = ["leogg", "dekugg", "dekugz", "help"]
-deku.category = ["main"]
-deku.settings = {}
-deku.description = "Memunculkan menu"
-deku.loading = true
+deku.command = "menu";
+deku.alias = ["leogg", "dekugg", "dekugz", "help"];
+deku.category = ["main"];
+deku.settings = {};
+deku.description = "Memunculkan menu";
+deku.loading = true;
 
-module.exports = deku
+module.exports = deku;
