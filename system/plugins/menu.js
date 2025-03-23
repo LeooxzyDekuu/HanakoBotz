@@ -380,7 +380,7 @@ Pilih salah satu menu yang kamu inginkan, aku akan membantu kamu!`
 }
 
 deku.command = "menu";
-deku.alias = ["leogg", "dekugg", "dekugz", "help"];
+deku.alias = ["leogg", "dekugg", "dekugz"];
 deku.category = ["main"];
 deku.settings = {};
 deku.description = "Memunculkan menu";
