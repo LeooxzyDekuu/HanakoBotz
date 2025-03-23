@@ -52,7 +52,7 @@ let deku = async (m, {
     };
 
     const json = await axios.post(
-        "https://quotly.netorare.codes/generate",
+        "https://qc.botcahx.eu.org/generate",
         obj, {
             headers: {
                 "Content-Type": "application/json"
