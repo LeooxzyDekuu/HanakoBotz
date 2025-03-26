@@ -286,10 +286,24 @@ Welcome to Script HanakoBotz / Dxyz - Lxzy`))
 
                 for (let participant of participants) {
                     if (action === "add") {
+                      let ppuser;
+                        try {
+                          ppuser = await sock.profilePictureUrl(participant, 'image')
+                        } catch (e) {
+                          ppuser = 'https://e.top4top.io/s_3372u3s4b0.jpg'
+                        }
+
+                      const welcome = await new canvafy.WelcomeLeave()
+                        .setAvatar(ppuser)
+                        .setBackground("image", "https://f.top4top.io/p_3372ppurc1.jpg")
+  .                      setTitle("Welcome")
+                        .setDescription(`Welcome Jangan Lupa Baca Rules🤗`)
+                        .setBorder("#2a2e35")
+                        .setAvatarBorder("#2a2e35")
+                        .setOverlayOpacity(0.3)
+                        .build();
                         sock.sendMessage(id, {
-                            image: {
-                                url: "https://files.catbox.moe/mk2oik.jpg"
-                            },
+                            image: welcome,
                             caption: `Yokoso! (Selamat datang!) Untuk member baru! bernama @${participant.split("@")[0]} ${config.name}-Kun senang sekali bisa bertemu denganmu! *🤩*\nJan Lupa Baca Rules Ya Membaru`,
                             footer: config.name,
                             buttons: [{
@@ -312,10 +326,24 @@ Welcome to Script HanakoBotz / Dxyz - Lxzy`))
                             }
                         });
                     } else if (action === "remove") {
+                      let ppuser;
+                        try {
+                          ppuser = await sock.profilePictureUrl(participant, 'image')
+                        } catch (e) {
+                          ppuser = 'https://e.top4top.io/s_3372u3s4b0.jpg'
+                        }
+
+                      const welcome = await new canvafy.WelcomeLeave()
+                        .setAvatar(ppuser)
+                        .setBackground("image", "https://f.top4top.io/p_3372ppurc1.jpg")
+  .                      setTitle("Welcome")
+                        .setDescription(`GoodbyeSemoga Kamu Datang Kembali🤗`)
+                        .setBorder("#2a2e35")
+                        .setAvatarBorder("#2a2e35")
+                        .setOverlayOpacity(0.3)
+                        .build();
                         sock.sendMessage(id, {
-                            image: {
-                                url: "https://files.catbox.moe/mk2oik.jpg"
-                            },
+                            image: welcome,
                             caption: `Sayonara, @${participant.split("@")[0]}-kun! Mata ne! :)`,
                             footer: config.name,
                             buttons: [{
