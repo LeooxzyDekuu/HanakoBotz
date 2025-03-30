@@ -1,4 +1,4 @@
-# **HanakoBotz - v1.3.8** 
+# **HanakoBotz - v1.3.9** 
 <p align="center">
   <img title="HanakoBotz" src="https://files.catbox.moe/movzsb.jpg">
 </p>
