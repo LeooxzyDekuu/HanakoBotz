@@ -1,6 +1,11 @@
-const dist = require('@distube/ytdl-core')
-const yts = require('yt-search')
-const fetch = require("node-fetch");
+// © HanakoBotz
+// • By: Leooxzy - Deku
+// • Owner: 6283136099660
+
+// By: Leooxzy
+// Bio cr: Krz
+
+const axios = require('axios');
 
 let rinokumura = {
     command: "ytdl",
@@ -22,6 +27,7 @@ let rinokumura = {
         conn,
         DekuGanz,
         Func,
+        Uploader,
         Scraper,
         text,
         config
@@ -33,9 +39,10 @@ let rinokumura = {
 
         let videoUrl;
         if (text.startsWith("http")) {
-            const getid = await dist.getVideoID(text);
-            video = await yts({
-                videoId: getid,
+            const match = /(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([^\?&]+)(?:\?is=[^&]*)?(?:\?si=[^&]*)?(?:&.*)?/;
+            const getid = text.match(match)
+            video = await require('yt-search')({
+                videoId: getid[1],
                 hl: 'id',
                 gl: 'ID'
             });
@@ -47,10 +54,10 @@ let rinokumura = {
 
         const UrlYt = client.yt[m.sender].url || video.url
         let metadata = `> • Title: ${video.title}
-> • Id: ${video.videoId}
-> • Ago: ${video.ago}
-> • Durasi: ${video.timestamp}
-> • Url: ${video.url}
+> • Id: ${video.videoId || ''}
+> • Ago: ${video.ago || ''}
+> • Durasi: ${video.timestamp || ''}
+> • Url: ${video.url || ''}
 `
         let infoMessage = `📁 Download YouTube
 ${metadata}
@@ -78,38 +85,48 @@ ${metadata}
 
         if (isAudio) {
             let audio;
+            let format;
             try {
-                const amdla = await Scraper.amdl(finalUrl, 'audio', '320k')
-                audio = amdla.download
+                const amdla = await Scraper.amdl(finalUrl, 'audio', '320k');
+                format = '320kbps';
+                audio = amdla.download;
             } catch (e) {
                 try {
                     const {
                         result: savetube
-                    } = await Scraper.SaveTube(finalUrl, "mp3")
+                    } = await Scraper.SaveTube(finalUrl, "mp3");
+                    format = 'mp3'
                     audio = savetube.download;
                 } catch (e) {
                     try {
                         const ddownra = await Scraper.ddownr.download(finalUrl, 'mp3');
+                        format = 'mp3';
                         audio = ddownra.downloadUrl;
                     } catch (e) {}
                 }
             }
 
-            const getid = await dist.getVideoID(finalUrl);
-            const audiom = await yts({
-                videoId: getid,
+            const buff = await axios.get(audio, {
+                responseType: 'arraybuffer'
+            });
+            const url = await Uploader.tmpfiles(buff.data);
+            const size = await Func.getSize(url);
+
+            const match = /(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([^\?&]+)(?:\?is=[^&]*)?(?:\?si=[^&]*)?(?:&.*)?/
+            const getid = finalUrl.match(match);
+            const audioo = await require('yt-search')({
+                videoId: getid[1],
                 hl: 'id',
                 gl: 'ID'
             });
 
-            const sizea = await Func.getSize(audio)
-            if (sizea > 100 * 1024 * 1024) {
+            if (size > 100 * 1024 * 1024) {
                 return sock.sendMessage(m.cht, {
                     document: {
                         url: audio
                     },
                     mimetype: "audio/mpeg",
-                    fileName: `${audiom.title}.mp3`,
+                    fileName: `${audioo.title}.mp3`,
                 }, {
                     quoted: await m.froll(config.owner[0], Func.Styles('Mendownload Audio YouTube'))
                 });
@@ -119,42 +136,61 @@ ${metadata}
                         url: audio
                     },
                     mimetype: "audio/mpeg",
+                    contextInfo: {
+                        mentionedJid: [m.sender],
+                        isForwarded: !0,
+                        forwardingScore: 127,
+                        externalAdReply: {
+                            title: audioo.title,
+                            body: format + ' / ' + size + ' / ' + audioo.author.name,
+                            mediaType: 1,
+                            thumbnailUrl: audioo.thumbnail,
+                            renderLargerThumbnail: false,
+                            sourceUrl: audio
+                        }
+                    }
                 }, {
                     quoted: await m.froll(config.owner[0], Func.Styles('Mendownload Audio YouTube'))
                 });
             }
         } else if (isVideo) {
-
-            const getid = await dist.getVideoID(finalUrl);
-            const videom = await yts({
-                videoId: getid,
+            const match = /(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([^\?&]+)(?:\?is=[^&]*)?(?:\?si=[^&]*)?(?:&.*)?/;
+            const getid = finalUrl.match(match)
+            const videoo = await yts({
+                videoId: getid[1],
                 hl: 'id',
                 gl: 'ID'
             });
 
             let video;
+            let format;
             try {
                 const amdlv = await Scraper.amdl(finalUrl, 'video', '720p')
+                format = '720p';
                 video = amdlv.download
             } catch (e) {
                 try {
                     const {
                         result: savetube
                     } = await Scraper.SaveTube(finalUrl, "720")
+                    format = '720p';
                     video = savetube.download;
                 } catch (e) {
                     try {
                         const ddownrv = await Scraper.ddownr.download(finalUrl, '720');
+                        format = '720p';
                         video = ddownrv.downloadUrl;
                     } catch (e) {}
                 }
             }
 
-            let response = await fetch(video, {
-                method: "HEAD"
+            const buff = await axios.get(video, {
+                responseType: 'arraybuffer'
             });
-            let fileSizeInBytes = parseInt(response.headers.get("content-length"));
-            if (fileSizeInBytes > 100 * 1024 * 1024) {
+            const url = await Uploader.tmpfiles(buff.data);
+            const size = await Func.getSize(url);
+
+            if (size > 100 * 1024 * 1024) {
                 return sock.sendMessage(m.cht, {
                     document: {
                         url: video
@@ -170,7 +206,7 @@ ${metadata}
                         url: video
                     },
                     mimetype: "video/mp4",
-                    caption: `📁 Download YouTube\n${metadata}`
+                    caption: `📁 Download YouTube\n${metadata}> • Format: ${format}\n> • Size: ${size}`
                 }, {
                     quoted: await m.froll(config.owner[0], Func.Styles('Mendownload Video YouTube'))
                 });
