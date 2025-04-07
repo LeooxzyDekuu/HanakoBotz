@@ -156,7 +156,7 @@ ${metadata}
         } else if (isVideo) {
             const match = /(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([^\?&]+)(?:\?is=[^&]*)?(?:\?si=[^&]*)?(?:&.*)?/;
             const getid = finalUrl.match(match)
-            const videoo = await yts({
+            const videoo = await require('yt-search')({
                 videoId: getid[1],
                 hl: 'id',
                 gl: 'ID'
@@ -216,4 +216,4 @@ ${metadata}
     }
 }
 
-module.exports = rinokumura
+module.exports = rinokumura;
