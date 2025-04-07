@@ -26,6 +26,7 @@
   const simple = require("./lib/simple.js");
   const fs = require("node:fs");
   const fetch = require("node-fetch");
+  const gradient = require('gradient-string');
   const path = require("path");
   const axios = require("axios");
   const pkg = require("./package.json");
@@ -112,7 +113,7 @@
   }).child({ class: "HanakoBotz" });
   logger.level = "fatal";
   
-    console.log(chalk.blue.bold(`⣿⣿⡿⠉⢋ ⢀⡏⡀⠠⠐  ⠂⢸⢸⣿⡀  ⢰⡀ ⠂ ⠂⠈ ⢈   ⠆⡄ 
+    console.log(gradient.rainbow(`⣿⣿⡿⠉⢋ ⢀⡏⡀⠠⠐  ⠂⢸⢸⣿⡀  ⢰⡀ ⠂ ⠂⠈ ⢈   ⠆⡄ 
 ⢠⠠⠆⠈⡄ ⣾⠇⡇⠆⡓⠁  ⣿⢸⣿⣷⡀  ⣿⣆⠐⠂⠈ ⢁  ⡀ ⢰⣷⡤
 ⡇⠈⢇⠁⠁⢰⣿ ⡇⢀⠠⠈⠒⢤⣿⠸⣿⣿⣿⣄ ⠸⣿⣆⢯ ⠄⠐  ⢰⢸⢸⣿⣿
 ⡇⡆⠟ ⡆⣼⡿ ⣷⠸⡆⠆ ⢸⣿⡆⡏⠻⢿⣿⣦⡘⠬⣿⡼⣇⢀⣆⣤ ⢸⣸⡼⢿⣿
@@ -130,23 +131,8 @@
 ⣿⣿⡟⣿⣿⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠃ ⢰⡿⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟  ⢀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏ ⢀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-Welcome to Script HanakoBotz / Dxyz - Lxzy`))
-    console.log(chalk.blue.bold(`By: Dxyz - Lxyz`))
-
-    console.log(chalk.yellow.bold("📁 Inisialisasi modul..."));
-    console.log(chalk.cyan.bold("- API Baileys Telah Dimuat"));
-    console.log(chalk.cyan.bold("- Sistem File Siap Digunakan"));
-    console.log(chalk.cyan.bold("- Database Telah Diinisialisasi"));
-
-    console.log(chalk.blue.bold("\n🤖 Info Bot:"));
-    console.log(chalk.white.bold("  | GitHub: ") + chalk.cyan.bold("https://github.com/LeooxzyDekuu"));
-    console.log(chalk.white.bold("  | Developer: ") + chalk.green.bold("Leooxzy/Deku"));
-    console.log(chalk.white.bold("  | Base Script: ") + chalk.green.bold("AxellNetwork"));
-    console.log(chalk.white.bold("  | Status Server: ") + chalk.green.bold("Online"));
-    console.log(chalk.white.bold("  | Versi: ") + chalk.magenta.bold(pkg.version));
-    console.log(chalk.white.bold("  | Versi Node.js: ") + chalk.magenta.bold(process.version));
-
-    console.log(chalk.blue.bold("\n🔁 Memuat plugin dan scraper dan case..."))
+`))
+    console.log(chalk.bold.green('[ Script ] ') + chalk.white('>>> ') + chalk.green(`Hanako-Botz Creator: Dxyz - Deku`));
 
   async function system() {
     const { state, saveCreds } = await useMultiFileAuthState(config.sessions);
@@ -173,15 +159,11 @@ Welcome to Script HanakoBotz / Dxyz - Lxzy`))
     global.hanako = sock;
     store.bind(sock.ev);
     if (!sock.authState.creds.registered) {
-      console.log(
-        chalk.white.bold(
-          "- Silakan masukkan nomor WhatsApp Anda, misalnya 628xxxx",
-        ),
-      );
-      const phoneNumber = await question(chalk.green.bold(`– Nomor Anda: `));
+      console.log(chalk.bold.green('[ Warning ] ') + chalk.white('>>> ') + chalk.green(`Masukan Nomor Kalian Di Sini\nMinsalnya 62 Terus Contohnya: 628xxx`));
+      const phoneNumber = await question(chalk.bold.green('[ Nomor Anda ] ') + chalk.white('>>> ') );
       const code = await sock.requestPairingCode(phoneNumber, "LEOODEKU");
       setTimeout(() => {
-        console.log(chalk.white.bold("- Kode Pairing Anda: " + code));
+        console.log(chalk.bold.green('[ Code ] ') + chalk.white('>>> ') + chalk.green(`Nih Code Pairing Mu Tuan: ${chalk.bold.green(code)}`));
       }, 3000);
     }
 
@@ -196,44 +178,41 @@ Welcome to Script HanakoBotz / Dxyz - Lxzy`))
                 if (lastDisconnect.error == "Error: Stream Errored (unknown)") {
                     process.exit(0)
                 } else if (reason === DisconnectReason.badSession) {
-                    console.log(
-                        chalk.red.bold("File sesi buruk, Harap hapus sesi dan scan ulang"),
-                    );
+                    console.log(chalk.bold.red('[ Warning ] ') + chalk.white('>>> ') + chalk.red(`File sesi buruk, Harap hapus sesi dan scan ulang`));
                     process.exit(0)
                 } else if (reason === DisconnectReason.connectionClosed) {
-                    console.log(
-                        chalk.yellow.bold("Koneksi ditutup, sedang mencoba untuk terhubung kembali..."),
-                    );
+                    console.log(chalk.bold.yellow('[ Warning ] ') + chalk.white('>>> ') + chalk.yellow(`Koneksi ditutup, sedang mencoba untuk terhubung kembali...`));
                     process.exit(0)
                 } else if (reason === DisconnectReason.connectionLost) {
-                    console.log(
-                        chalk.yellow.bold("Koneksi hilang, mencoba untuk terhubung kembali..."),
-                    );
+                    console.log(chalk.bold.yellow('[ Warning ] ') + chalk.white('>>> ') + chalk.yellow(`Koneksi hilang, mencoba untuk terhubung kembali...`));
                     process.exit(0)
                 } else if (reason === DisconnectReason.connectionReplaced) {
-
-                    console.log(
-                        chalk.green.bold("Koneksi diganti, sesi lain telah dibuka. Harap tutup sesi yang sedang berjalan."),
-                    );
+                    console.log(chalk.bold.yellow('[ Warning ] ') + chalk.white('>>> ') + chalk.yellow(`Koneksi diganti, sesi lain telah dibuka. Harap tutup sesi yang sedang berjalan.`));
                     sock.logout();
                 } else if (reason === DisconnectReason.loggedOut) {
-                    console.log(
-                        chalk.green.bold("Perangkat logout, harap scan ulang."),
-                    );
+                    console.log(chalk.bold.yellow('[ Warning ] ') + chalk.white('>>> ') + chalk.yellow(`Perangkat logout, harap scan ulang.`));
                     sock.logout();
                 } else if (reason === DisconnectReason.restartRequired) {
-                    console.log(chalk.green.bold("Restart diperlukan, sedang memulai ulang..."));
+                    console.log(chalk.bold.yellow('[ Warning ] ') + chalk.white('>>> ') + chalk.yellow(`Restart diperlukan, sedang memulai ulang...`));
                     system();
                 } else if (reason === DisconnectReason.timedOut) {
-                    console.log(
-                        chalk.green.bold("Koneksi waktu habis, sedang mencoba untuk terhubung kembali..."),
-                    );
+                    console.log(chalk.bold.yellow('[ Warning ] ') + chalk.white('>>> ') + chalk.yellow(`Koneksi waktu habis, sedang mencoba untuk terhubung kembali...`));
                     process.exit(0)
                 }
             } else if (connection === "connecting") {
-                console.log(chalk.blue.bold("Menghubungkan ke WhatsApp..."));
+                console.log(chalk.bold.green('[ Loading ] ') + chalk.white('>>> ') + chalk.green(`Menghubungkan ke WhatsApp...`));
             } else if (connection === "open") {
-                console.log(chalk.green.bold("Bot berhasil terhubung."));
+                const info = sock.user
+                const informasi = {
+                   "Name": info.name,
+                   "Id": info.id,
+                   "lid": info.lid,
+                   "Sender": info.jid,
+                   "Owner": config.owner.map(a => a) + '@s.whatsapp.net'
+                };
+                console.table(informasi)
+                console.log(chalk.bold.green('[ Loading ] ') + chalk.white('>>> ') + chalk.green(`🔁 Memuat plugin dan scraper dan case...`));
+                console.log(chalk.bold.green('[ Terconnect ] ') + chalk.white('>>> ') + chalk.green(`Bot berhasil terhubung.`));
             }
         });
 
