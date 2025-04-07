@@ -1,3 +1,10 @@
+// © HanakoBotz
+// • By: Leooxzy - Deku
+// • Owner: 6283136099660
+
+// By: Leooxzy
+// Bio cr: Krz
+
 const axios = require('axios');
 
 module.exports = {
