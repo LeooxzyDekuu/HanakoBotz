@@ -52,6 +52,7 @@
     "form": "^0.2.5",
     "groq-sdk": "^0.9.1",
     "g-i-s": "^2.1.7",
+    "gradient-string": "^2.0.2",
     "human-readable": "^0.2.1",
     "i": "^0.3.7",
     "jimp": "^0.16.1",
